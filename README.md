@@ -4,7 +4,9 @@ This is a Javascript example using the [module pattern](https://addyosmani.com/r
 
 ## Installation
 
-It requires **Yarn** to install the dependencies.
+[Yarn](https://yarnpkg.com/lang/en/docs/install/) is required to install the dependencies.
+
+Once Yarn is installed:
 
 ```sh
 # To install dependencies
