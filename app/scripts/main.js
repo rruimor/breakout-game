@@ -28,25 +28,6 @@ var Game = (function() {
     document.addEventListener('keydown', Control.keyDownHandler, false);
     document.addEventListener('keyup', Control.keyUpHandler, false);
 
-    var bricks = [];
-    var brickWidth = (canvas.width - BRICKS_PADDING * (BRICKS_COLUMNS_COUNT + 1)) / BRICKS_COLUMNS_COUNT;
-
-    for (var i = 0; i < BRICKS_ROWS_COUNT; i++){
-      bricks[i] = [];
-
-      for (var j = 0; j < BRICKS_COLUMNS_COUNT; j++){
-        bricks[i][j] = {
-          position: {
-            x: (brickWidth + BRICKS_PADDING) * j + BRICKS_PADDING,
-            y: (BRICK_HEIGHT + BRICKS_PADDING) * i + BRICKS_PADDING
-          },
-          height: BRICK_HEIGHT,
-          width: brickWidth,
-          color: ColorHelper.getRandomColor()
-        };
-      }
-    }
-
     return {
       canvas: canvas,
       ball: {
@@ -69,7 +50,13 @@ var Game = (function() {
           y: canvas.height - PADDLE_HEIGHT
         }
       },
-      bricks: bricks,
+      bricks: _buildBricks(
+        canvas.width,
+        BRICKS_ROWS_COUNT,
+        BRICKS_COLUMNS_COUNT,
+        BRICKS_PADDING,
+        BRICK_HEIGHT
+      ),
       score: 0
     };
   };
@@ -83,6 +70,30 @@ var Game = (function() {
         document.location.reload();
       }
     }, 10);
+  };
+
+  var _buildBricks = function(canvasWidth, rowsCount, columnsCount, padding, brickHeight){
+
+    var bricks = [];
+    var brickWidth = (canvasWidth - BRICKS_PADDING * (BRICKS_COLUMNS_COUNT + 1)) / BRICKS_COLUMNS_COUNT;
+
+    for (var i = 0; i < BRICKS_ROWS_COUNT; i++){
+      bricks[i] = [];
+
+      for (var j = 0; j < BRICKS_COLUMNS_COUNT; j++){
+        bricks[i][j] = {
+          position: {
+            x: (brickWidth + BRICKS_PADDING) * j + BRICKS_PADDING,
+            y: (BRICK_HEIGHT + BRICKS_PADDING) * i + BRICKS_PADDING
+          },
+          height: BRICK_HEIGHT,
+          width: brickWidth,
+          color: ColorHelper.getRandomColor()
+        };
+      }
+    }
+
+    return bricks;
   };
 
   var _isBallMoving = function(ball) {
@@ -175,7 +186,7 @@ var Game = (function() {
         if (ball.position.y < brick.position.y + brick.height + ball.radius) {
           // TODO Handle touching multiple bricks ;)
           if (ball.position.x > brick.position.x - ball.radius
-            && ball.position.x - ball.radius < brick.position.x + brick.width + ball.radius){
+            && ball.position.x - ball.radius < brick.position.x + brick.width + ball.radius) {
               hitBrick = brick;
           }
         }
